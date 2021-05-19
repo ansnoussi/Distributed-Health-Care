@@ -12,6 +12,8 @@ class App extends Component {
       numHits: null, // Total search results found
       searchOffset: 0, // Search result pagination offset
       selectedMedicine: null, // Selected paragraph object
+      showRecModal: false, // to show or hide the reclamation modal
+      didAtLeastOneSearch : false, // self explanatory
     }
     this.searchDebounce = null
 
@@ -28,7 +30,7 @@ class App extends Component {
 
     /** Debounce search input by 100 ms */
     onSearchInput (evt) {
-      this.setState({searchTerm : evt.target.value})
+      this.setState({searchTerm : evt.target.value, didAtLeastOneSearch : true})
 
       clearTimeout(this.searchDebounce)
       this.searchDebounce = setTimeout(async () => {
@@ -110,6 +112,20 @@ class App extends Component {
 
       {/* <!-- Search Results Card List --> */}
       <div className="search-results">
+
+        {/* when the are no output, give option to make reclamation */}
+        {this.state.searchResults.length === 0 && this.state.didAtLeastOneSearch ?
+
+        <div 
+          className="mui-panel" 
+          style={{display : 'flex' , justifyContent : 'center', flexDirection : 'column', alignItems: 'center'}} 
+          onClick={() => this.setState({showRecModal : true})} 
+        >
+          <span className="material-icons md-48">help</span>
+          <div className="mui--text-title" > Didn't find what you are looking for ? </div>
+        </div>
+
+        :null}
 
       {this.state.searchResults.map((hit, index) => {
         return (<div className="mui-panel" onClick={() => this.showMedicineModal(hit)} key={index} >
@@ -283,6 +299,41 @@ class App extends Component {
         </div>
 
       : null}
+
+
+
+      {/* <!-- Medicine Modal Window --> */}
+      {this.state.showRecModal ? 
+      
+      <div className="medicine-modal">
+        <div className="medicine-container">
+
+          {/* <!-- Medicine Section Metadata --> */}
+          <div className="title-row">
+            <div className="mui--text-display2 all-caps"> aaaaaa </div>
+            <div className="mui--text-display1"> bbbbbbb </div>
+          </div>
+
+          <br/>
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> wa : </div>
+            <div className="mui--text-body2">
+              cccccc
+            </div>
+          </div>
+
+
+        {/* <!-- Medicine Pagination Footer --> */}
+        <div className="modal-footer">
+          <button className="mui-btn mui-btn--flat"onClick={() => this.setState({showRecModal : false})} >Close</button>
+        </div>
+
+        </div>      
+        </div>
+
+      : null}
+
 
     </div>
     )  

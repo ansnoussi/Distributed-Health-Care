@@ -74,20 +74,17 @@ class App extends Component {
       const rez = await this.search()
 
       this.setState({searchResults : rez})
-      // document.documentElement.scrollTop = 0
     }
 
 
     /** Display selected medicine in modal window */
     async showMedicineModal (searchHit) {
-      // document.body.style.overflow = 'hidden'
       this.setState({selectedMedicine : searchHit })
     }
 
 
     /** Close the medicine detail modal */
     closeMedicineModal () {
-      // document.body.style.overflow = 'auto'
       this.setState({ selectedMedicine : null})
     }
 
@@ -160,17 +157,130 @@ class App extends Component {
             </div>
           </div>
 
-          {/* Continue ... */}
+            
+          <div className="info-row" >
+            <div className="mui--text-subhead"> forme : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.forme }
+            </div>
+          </div>
 
-        </div>
+          <div className="info-row" >
+            <div className="mui--text-subhead"> presentation : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.presentation }
+            </div>
+          </div>
+    
+          
+          <div className="info-row" >
+            <div className="mui--text-subhead"> conditionnement_primaire : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.conditionnement_primaire }
+            </div>
+          </div>
+
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> specification : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.specification }
+            </div>
+          </div>
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> dci : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.dci }
+            </div>
+          </div>
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> classement_VEIC : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.classement_VEIC }
+            </div>
+          </div>
+          
+          <div className="info-row" >
+            <div className="mui--text-subhead"> classe_therapeutique : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.classe_therapeutique }
+            </div>
+          </div>
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> sous_classe : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.sous_classe }
+            </div>
+          </div>
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> laboratoire : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2"> 
+              { this.state.selectedMedicine._source.laboratoire }
+            </div>
+          </div>
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> tableau : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.tableau }
+            </div>
+          </div>
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> duree_conservation : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.duree_conservation }
+            </div>
+          </div>
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> generique_princeps : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.generique_princeps }
+            </div>
+          </div>
+
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> amm : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.amm }
+            </div>
+          </div>
+
+          <div className="info-row" >
+            <div className="mui--text-subhead"> date_amm : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.date_amm }
+            </div>
+          </div>
+
+
+            <div className="mui--text-subhead"> indication : </div>
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.indication }
+            </div>
+
+
 
         {/* <!-- Medicine Pagination Footer --> */}
         <div className="modal-footer">
           <button className="mui-btn mui-btn--flat" onClick={this.closeMedicineModal}>Close</button>
         </div>
 
-      </div>
-
+        </div>      
+        </div>
 
       : null}
 

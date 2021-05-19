@@ -1,138 +1,162 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import "./App.css";
 
 class App extends Component {
-  state = {
-    baseUrl: 'http://localhost:3000', // API url
-    searchTerm: '', // Default search term
-    searchDebounce: null, // Timeout for search bar debounce
-    searchResults: [], // Displayed search results
-    numHits: null, // Total search results found
-    searchOffset: 0, // Search result pagination offset
-    selectedMedicine: null, // Selected paragraph object
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      baseUrl: 'http://localhost:3000', // API url
+      searchTerm: '', // Default search term
+      searchResults: [], // Displayed search results
+      numHits: null, // Total search results found
+      searchOffset: 0, // Search result pagination offset
+      selectedMedicine: null, // Selected paragraph object
+    }
+    this.searchDebounce = null
+
+    //binding functions
+    this.onSearchInput = this.onSearchInput.bind(this)
+    this.search = this.search.bind(this)
+    this.nextResultsPage = this.nextResultsPage.bind(this)
+    this.prevResultsPage = this.prevResultsPage.bind(this)
+    this.showMedicineModal = this.showMedicineModal.bind(this)
+    this.closeMedicineModal = this.closeMedicineModal.bind(this)
+  }
+
 
 
     /** Debounce search input by 100 ms */
-    onSearchInput () {
-      clearTimeout(this.state.searchDebounce)
-      this.state.searchDebounce = setTimeout(async () => {
-        this.state.searchOffset = 0
-        this.state.searchResults = await this.search()
+    onSearchInput (evt) {
+      this.setState({searchTerm : evt.target.value})
+
+      clearTimeout(this.searchDebounce)
+      this.searchDebounce = setTimeout(async () => {
+        const rez = await this.search()
+        this.setState({ searchOffset : 0, searchResults : rez })
       }, 100)
+
     }
 
     /** Call API to search for inputted term */
     async search () {
       const response = await axios.get(`${this.state.baseUrl}/search`, { params: { term: this.state.searchTerm, offset: this.state.searchOffset } })
-      this.state.numHits = response.data.hits.total
-      console.log(response.data.hits.hits)
+      this.setState({numHits : response.data.hits.total })
       return response.data.hits.hits
     }
 
     /** Get next page of search results */
     async nextResultsPage () {
       if (this.state.numHits > 10) {
-        this.state.searchOffset += 10
-        if (this.state.searchOffset + 10 > this.state.numHits) { this.state.searchOffset = this.state.numHits - 10}
-        this.state.searchResults = await this.search()
-        document.documentElement.scrollTop = 0
+        let newOffset = this.state.searchOffset + 10
+        this.setState({searchOffset : newOffset})
+
+        if (this.state.searchOffset + 10 > this.state.numHits) {
+          this.setState({searchOffset : this.state.numHits - 10 }) 
+        }
+
+        const rez = await this.search()
+        this.setState({searchResults : rez})
       }
     }
 
 
     /** Get previous page of search results */
     async prevResultsPage () {
-      this.state.searchOffset -= 10
-      if (this.state.searchOffset < 0) { this.state.searchOffset = 0 }
-      this.state.searchResults = await this.search()
-      document.documentElement.scrollTop = 0
+      let newOffset = this.state.searchOffset - 10
+      
+      if (newOffset < 0) { 
+        this.setState({searchOffset : 0}) 
+      }else {
+        this.setState({ searchOffset : newOffset })
+      }
+
+      const rez = await this.search()
+
+      this.setState({searchResults : rez})
+      // document.documentElement.scrollTop = 0
     }
 
 
     /** Display selected medicine in modal window */
     async showMedicineModal (searchHit) {
-      try {
-        document.body.style.overflow = 'hidden'
-        this.state.selectedMedicine = searchHit
-
-      } catch (err) {
-        console.error(err)
-      }
+      // document.body.style.overflow = 'hidden'
+      this.setState({selectedMedicine : searchHit })
     }
 
 
     /** Close the medicine detail modal */
     closeMedicineModal () {
-      document.body.style.overflow = 'auto'
-      this.state.selectedMedicine = null
+      // document.body.style.overflow = 'auto'
+      this.setState({ selectedMedicine : null})
     }
 
 
 
   render() {
-    <div class="app-container" >
+    return(
+    <div className="app-container" >
 
       {/* <!-- Search Bar Header --> */}
-      <div class="mui-panel">
-        <div class="mui-textfield">
+      <div className="mui-panel">
+        <div className="mui-textfield">
           <input type="text" value={this.state.searchTerm} onChange={this.onSearchInput} />
           <label>Search</label>
         </div>
       </div>
 
       {/* <!-- Search Metadata Card --> */}
-      <div class="mui-panel">
-        <div class="mui--text-headline">{ state.numHits } Hits</div>
-        <div class="mui--text-subhead">Displaying Results { state.searchOffset } - { state.searchOffset + 9 }</div>
+      <div className="mui-panel">
+        <div className="mui--text-headline">{ this.state.numHits } Hits</div>
+        <div className="mui--text-subhead">Displaying Results { this.state.searchOffset } - { this.state.searchOffset + 9 }</div>
       </div>
 
       {/* <!-- Search Results Card List --> */}
-      <div class="search-results" ref="state.searchResults">
+      <div className="search-results">
 
-      {this.state.searchResults.map(hit => {
-        <div class="mui-panel" onClick={() => showMedicineModal(hit)} >
-              <div class="mui--text-title" > { hit._source.specialite } </div>
-              <div class="mui-divider"></div>
-              <div class="mui--text-subhead"> { hit._source.dci }</div>
-              <div class="mui--text-body2"> Dosage : { hit._source.dosage }</div>
-              <div class="mui--text-body2"> Forme : { hit._source.forme }</div>
-        </div>
+      {this.state.searchResults.map((hit, index) => {
+        return (<div className="mui-panel" onClick={() => this.showMedicineModal(hit)} key={index} >
+              <div className="mui--text-title" > { hit._source.specialite } </div>
+              <div className="mui-divider"></div>
+              <div className="mui--text-subhead"> { hit._source.dci }</div>
+              <div className="mui--text-body2"> Dosage : { hit._source.dosage }</div>
+              <div className="mui--text-body2"> Forme : { hit._source.forme }</div>
+        </div>)
       })}
 
       </div>
 
       {/* <!-- Bottom Pagination Card --> */}
-      <div class="mui-panel pagination-panel">
-          <button class="mui-btn mui-btn--flat" onClick={prevResultsPage}>Prev Page</button>
-          <button class="mui-btn mui-btn--flat"  onClick={nextResultsPage}>Next Page</button>
+      <div className="mui-panel pagination-panel">
+          <button className="mui-btn mui-btn--flat" onClick={this.prevResultsPage}>Prev Page</button>
+          <button className="mui-btn mui-btn--flat"  onClick={this.nextResultsPage}>Next Page</button>
       </div>
 
       {/* <!-- Medicine Modal Window --> */}
       {this.state.selectedMedicine ? 
       
-      <div ref="medicineModal" class="medicine-modal">
-        <div class="medicine-container">
+      <div className="medicine-modal">
+        <div className="medicine-container">
 
           {/* <!-- Medicine Section Metadata --> */}
-          <div class="title-row">
-            <div class="mui--text-display2 all-caps">{ state.selectedMedicine._source.specialite }</div>
-            <div class="mui--text-display1">{ state.selectedMedicine._source.dci }</div>
+          <div className="title-row">
+            <div className="mui--text-display2 all-caps">{ this.state.selectedMedicine._source.specialite }</div>
+            <div className="mui--text-display1">{ this.state.selectedMedicine._source.dci }</div>
           </div>
 
           <br/>
 
-          <div class="info-row" >
-            <div class="mui--text-subhead"> specialite : </div> &nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="mui--text-body2">
-              { state.selectedMedicine._source.specialite }
+          <div className="info-row" >
+            <div className="mui--text-subhead"> specialite : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.specialite }
             </div>
           </div>
 
-          <div class="info-row" >
-            <div class="mui--text-subhead"> dosage : </div> &nbsp;&nbsp;&nbsp;&nbsp;
-            <div class="mui--text-body2">
-              { state.selectedMedicine._source.dosage }
+          <div className="info-row" >
+            <div className="mui--text-subhead"> dosage : </div> &nbsp;&nbsp;&nbsp;&nbsp;
+            <div className="mui--text-body2">
+              { this.state.selectedMedicine._source.dosage }
             </div>
           </div>
 
@@ -141,8 +165,8 @@ class App extends Component {
         </div>
 
         {/* <!-- Medicine Pagination Footer --> */}
-        <div class="modal-footer">
-          <button class="mui-btn mui-btn--flat" onClick={closeMedicineModal}>Close</button>
+        <div className="modal-footer">
+          <button className="mui-btn mui-btn--flat" onClick={this.closeMedicineModal}>Close</button>
         </div>
 
       </div>
@@ -151,6 +175,7 @@ class App extends Component {
       : null}
 
     </div>
+    )  
   }
 }
 

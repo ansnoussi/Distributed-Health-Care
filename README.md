@@ -1,7 +1,7 @@
-# PFA (GL4)
+# Decentralized Health Care
 
-Vérification de la véracité des médicaments et des vaccins en utilisant la Blockchain.
+A Decentralized Health Care system to be used by end users for verifying the veracity of vaccins and generally any type of pharmaceuticals.
 
-## Overview
+## Gneral Architecture
 
-![Architecture Description](./overview.drawio.svg)
+![Architecture Description](./docs/overview.drawio.svg)

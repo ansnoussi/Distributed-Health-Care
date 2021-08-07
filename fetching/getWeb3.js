@@ -1,4 +1,7 @@
-import Web3 from 'web3'
+const Web3 = require('web3')
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
 
 let getWeb3 = new Promise(function(resolve, reject) {
   // Wait for loading completion to avoid race conditions with web3 injection timing.
@@ -36,4 +39,4 @@ let getWeb3 = new Promise(function(resolve, reject) {
   })
 })
 
-export default getWeb3
+module.exports = getWeb3

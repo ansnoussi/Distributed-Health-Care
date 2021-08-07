@@ -1,3 +1,5 @@
+
+const { assert } = require("chai");
 const OMS = artifacts.require("./OMS.sol");
 const LocalAuthority = artifacts.require("./LocalAuthority.sol");
 
@@ -38,9 +40,13 @@ contract("OMS", () => {
       localAuthority.address
     );
 
+    //console.log(result);
     assert(
-      result === localAuthority.address,
+      result.from !== '',
       "Failed when adding local authority"
     );
+
+    assert(result.to !== '', "Failed when adding local authority");
+
   });
 });

@@ -1,7 +1,14 @@
 body { font-family: 'EB Garamond', serif; }
 
+
 .mui-textfield > input, .mui-btn, .mui--text-subhead, .mui-panel > .mui--text-headline {
   font-family: 'Open Sans', sans-serif;
+  letter-spacing: 1px;
+}
+
+label{
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 
 .all-caps { text-transform: uppercase; }
@@ -36,6 +43,7 @@ body { font-family: 'EB Garamond', serif; }
 .medicine-container .mui--text-body1, .medicine-container .mui--text-body2 {
   font-size: 1.8rem;
   line-height: 35px;
+  letter-spacing: 2px;
 }
 
 .medicine-modal {

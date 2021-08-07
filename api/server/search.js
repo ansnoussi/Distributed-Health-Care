@@ -7,13 +7,38 @@ module.exports = {
     const body = {
 
       query: { 
-        match: {
-          indication: {
-            query: term,
-            operator: 'and',
-            fuzziness: 'auto'
-          } 
-        } 
+          "bool": {
+            "should": [ 
+                { 
+                  "match": 
+                    { 
+                      "dci^3": {
+                        "query": term,
+                        "fuzziness": 'auto'
+                      } 
+                    }
+                },
+                { 
+                  "match": 
+                    { 
+                      "specialite": {
+                        "query": term,
+                        "fuzziness": 'auto'
+                      } 
+                    }
+                },
+                { 
+                  "match": 
+                    { 
+                      "indication": {
+                        "query": term,
+                        "operator": 'and',
+                        "fuzziness": 'auto'
+                      } 
+                    }
+                },
+            ]
+          },
       },
       highlight: { fields: { text: {} } }
     }

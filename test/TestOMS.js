@@ -1,5 +1,5 @@
-const { assert } = require("chai");
 
+const { assert } = require("chai");
 const OMS = artifacts.require("./OMS.sol");
 const LocalAuthority = artifacts.require("./LocalAuthority.sol");
 
@@ -47,5 +47,6 @@ contract("OMS", () => {
     );
 
     assert(result.to !== '', "Failed when adding local authority");
+
   });
 });

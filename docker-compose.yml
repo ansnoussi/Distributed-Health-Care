@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   api: # Node.js App
-    container_name: pfa-api
+    container_name: dhc-api
     build: ./api
     ports:
       - "3000:3000" # Expose API port
@@ -12,7 +12,7 @@ services:
       - PORT=3000
 
   frontend: # FrontEnd Instance
-    container_name: pfa-frontend
+    container_name: dhc-frontend
     build:
       context: ./client
       dockerfile: Dockerfile
@@ -25,7 +25,7 @@ services:
       - CHOKIDAR_USEPOLLING=true # enables a polling mechanism for hot-reloading
 
   admin: # Admin Instance
-    container_name: pfa-admin
+    container_name: dhc-admin
     build:
       context: ./admin
       dockerfile: Dockerfile
@@ -38,7 +38,7 @@ services:
       - CHOKIDAR_USEPOLLING=true # enables a polling mechanism for hot-reloading
 
   elasticsearch: # Elasticsearch Instance
-    container_name: pfa-search
+    container_name: dhc-search
     image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
     volumes: # Persist ES data in seperate "esdata" volume
       - esdata:/usr/share/elasticsearch/data

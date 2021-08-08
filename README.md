@@ -1,4 +1,4 @@
-# Distributed Health Care
+# Distributed Health Care (DHC)
 
 A Distributed Health Care system to be used by end users for verifying the veracity of vaccins and generally any type of pharmaceuticals.
 

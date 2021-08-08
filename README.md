@@ -6,13 +6,6 @@ A Distributed Health Care system to be used by end users for verifying the verac
 
 ![Architecture Description](./docs/overview.drawio.svg)
 
-## How to use
-
-### Run tests
-
-1. run `npm install` in the root directory to install the chai module
-2. run `truffle test` to run tests in the test directory
-
 ## FAQ
 
 <details>
